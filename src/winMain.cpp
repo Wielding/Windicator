@@ -1,10 +1,8 @@
 #include "../include/framework.h"
 #include "../include/MainWindow.h"
-
 #include "../resources/resource.h"
 
 #include <string>
-
 
 INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
         _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
@@ -30,7 +28,6 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
             LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MAIN_MENU));
 
     MSG msg = {};
-
 
     while (GetMessage(&msg, nullptr, 0, 0)) {
         if (!TranslateAccelerator(msg.hwnd, hAccelerators, &msg)) {

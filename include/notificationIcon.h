@@ -4,12 +4,12 @@
 
 namespace NotificationIcon {
 
-	HRESULT AddNotificationIcon(HINSTANCE hInst, HWND hWndMain, UINT nDesktop);
-    HRESULT ModifyNotificationIcon(HINSTANCE hInst, HWND hWndMain, UINT nDesktop);
+	HRESULT Add(HINSTANCE hInst, HWND hWndMain, UINT nDesktop);
+    HRESULT Modify(HINSTANCE hInst, HWND hWndMain, UINT nDesktop);
 
-	HRESULT RemoveNotificationIcon();
+	HRESULT Remove();
 
-	INT_PTR CALLBACK NotificationIconWndProc(HINSTANCE hInst, HWND hWnd,
+	INT_PTR CALLBACK WndProc(HINSTANCE hInst, HWND hWnd,
 		UINT message, WPARAM wParam,
 		LPARAM lParam);
 

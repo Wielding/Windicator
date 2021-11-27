@@ -2,25 +2,24 @@
 #include "../include/MainWindow.h"
 #include "../include/messages.h"
 #include "../include/notificationIcon.h"
-#include "../include/desktopWatcher.h"
 
 /// @brief set window class data
 /// @param wc pointer to window class structure
 void MainWindow::AmendWindowClass(WNDCLASSEXW* wc)
 {
-	wc->hIcon = LoadIcon(wc->hInstance, MAKEINTRESOURCE(IDI_APP_ICON));
-	wc->hIconSm = LoadIcon(wc->hInstance, MAKEINTRESOURCE(IDI_SMALL));
-	wc->lpszMenuName = MAKEINTRESOURCEW(IDC_MAIN_MENU);
+    wc->hIcon = LoadIcon(wc->hInstance, MAKEINTRESOURCE(IDI_APP_ICON));
+    wc->hIconSm = LoadIcon(wc->hInstance, MAKEINTRESOURCE(IDI_SMALL));
+    wc->lpszMenuName = MAKEINTRESOURCEW(IDC_MAIN_MENU);
 }
 
 /// @brief return the window class name
 /// @return window class name
 PCWSTR MainWindow::ClassName() const
 {
-	LoadStringW(GetModuleHandle(nullptr), IDC_MAIN_MENU,
-			const_cast<LPWSTR>(m_szMainWindowClass), MAX_LOAD_STRING);
+    LoadStringW(GetModuleHandle(nullptr), IDC_MAIN_MENU,
+            const_cast<LPWSTR>(m_szMainWindowClass), MAX_LOAD_STRING);
 
-	return m_szMainWindowClass;
+    return m_szMainWindowClass;
 }
 
 /// @brief Handle windows messages
@@ -30,15 +29,13 @@ PCWSTR MainWindow::ClassName() const
 /// @return LRESULT
 LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-	auto* const hWnd = m_hWnd;
+    auto* const hWnd = m_hWnd;
 
-	switch (uMsg)
-	{
-	case WM_CREATE:
-		NotificationIcon::AddNotificationIcon(m_hInstance, m_hWnd, 1);
+    switch (uMsg) {
+    case WM_CREATE:
+        NotificationIcon::Add(m_hInstance, m_hWnd, 1);
 
         watcher_data.hWnd = m_hWnd;
-
 
         m_hDesktopThread = CreateThread(
                 nullptr,
@@ -47,63 +44,69 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                 &watcher_data,
                 0,
                 &m_dwThreadId
-                );
-		break;
+        );
+        break;
 
-	case APP_WM_ICON_NOTIFY:
-		return NotificationIcon::NotificationIconWndProc(GetModuleHandle(nullptr), hWnd, uMsg, wParam, lParam);
+    case APP_WM_ICON_NOTIFY:
+        return NotificationIcon::WndProc(GetModuleHandle(nullptr), hWnd, uMsg, wParam, lParam);
 
-	case WM_COMMAND:
-	{
-		switch (const int wmId = LOWORD(wParam))
-		{
-		case IDM_ABOUT:
-			DialogBox(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, AboutDialog::DlgProc);
-			break;
+    case WM_COMMAND: {
+        switch (const int wmId = LOWORD(wParam)) {
+        case IDM_ABOUT:
+            DialogBox(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, AboutDialog::DlgProc);
+            break;
 
-		case IDM_NOTIFY_EXIT:
-		case IDM_EXIT:
-			NotificationIcon::RemoveNotificationIcon();
-			DestroyWindow(hWnd);
-			break;
-		default:
-			return DefWindowProc(hWnd, uMsg, wParam, lParam);
-		}
-	}
-		break;
+        case IDM_NOTIFY_EXIT:
+        case IDM_EXIT: {
+            std::lock_guard lock(watcher_data.lock);
+            watcher_data.keepGoing = FALSE;
+        }
+#ifdef _TIDY_TIMEOUT
+            WaitForSingleObject(m_hDesktopThread, 2000);
+#endif
+            NotificationIcon::Remove();
+            DestroyWindow(hWnd);
+            break;
+        case IDM_NOTIFY_TOGGLE_VISIBLITY:
+            m_isVisible = !m_isVisible;
+            ShowWindow(m_hWnd, (m_isVisible ? SW_SHOW : SW_HIDE));
+            break;
+        default:
+            return DefWindowProc(hWnd, uMsg, wParam, lParam);
+        }
+    }
+        break;
 
-	case WM_DESTROY:
-	{
-		PostQuitMessage(0);
-		return 0;
-	}
+    case WM_DESTROY: {
+        PostQuitMessage(0);
+        return 0;
+    }
 
-	case WM_PAINT:
-	{
-		PAINTSTRUCT ps;
-		HDC hdc = BeginPaint(hWnd, &ps);
-		FillRect(hdc, &ps.rcPaint, reinterpret_cast<HBRUSH>((COLOR_WINDOW + 1)));
-		EndPaint(hWnd, &ps);
-	}
-		return 0;
+    case WM_PAINT: {
+        PAINTSTRUCT ps;
+        HDC hdc = BeginPaint(hWnd, &ps);
+        FillRect(hdc, &ps.rcPaint, reinterpret_cast<HBRUSH>((COLOR_WINDOW+1)));
+        EndPaint(hWnd, &ps);
+    }
+        return 0;
 
     case APP_WM_DESKTOP_CHANGE: {
         auto id = LOWORD(lParam);
 
-        NotificationIcon::ModifyNotificationIcon(m_hInstance, m_hWnd, id);
+        NotificationIcon::Modify(m_hInstance, m_hWnd, id);
     }
 
         return 0;
 
-	default:;
-	}
+    default:;
+    }
 
-	return DefWindowProc(hWnd, uMsg, wParam, lParam);
+    return DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
 void MainWindow::Show(int nShowCmd) const
 {
-	ShowWindow(m_hWnd, nShowCmd);
+    ShowWindow(m_hWnd, nShowCmd);
 }
 
 

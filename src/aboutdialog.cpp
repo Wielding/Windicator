@@ -3,56 +3,51 @@
 
 #include <string>
 
+namespace AboutDialog {
+    // This is left outside as a global for others to access (e.g. version check logic)
+    VERSION_INFO gStVersionInfo{};  // NOLINT(clang-diagnostic-exit-time-destructors)
 
-namespace AboutDialog
-{
-	// This is left outside as a global for others to access (e.g. version check logic)
-	VERSION_INFO gStVersionInfo{};  // NOLINT(clang-diagnostic-exit-time-destructors)
+    INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+    {
+        UNREFERENCED_PARAMETER(lParam);
+        switch (message) {
+        case WM_INITDIALOG: {
+            // extract the version information from the resources
+            wchar_t moduleFileName[MAX_PATH];
+            GetModuleFileNameW(GetModuleHandle(nullptr), moduleFileName, MAX_PATH);
+            DWORD ptr;
 
-	INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
-	{
-		UNREFERENCED_PARAMETER(lParam);
-		switch (message)
-		{
-		case WM_INITDIALOG:
-		{
-			// extract the version information from the resources
-			wchar_t moduleFileName[MAX_PATH];
-			GetModuleFileNameW(GetModuleHandle(nullptr), moduleFileName, MAX_PATH);
-			DWORD ptr;
+            const auto versionInfoSize = GetFileVersionInfoSize(moduleFileName, &ptr);
+            auto* const versionInfo = new char[versionInfoSize];
 
-			const auto versionInfoSize = GetFileVersionInfoSize(moduleFileName, &ptr);
-			auto* const versionInfo = new char[versionInfoSize];
+            GetFileVersionInfo(moduleFileName, 0, versionInfoSize, versionInfo);
 
-			GetFileVersionInfo(moduleFileName, 0, versionInfoSize, versionInfo);
+            UINT pBlockSize;
+            LPVOID pVersionBlock = nullptr;
 
-			UINT pBlockSize;
-			LPVOID pVersionBlock = nullptr;
+            // the code page is fixed to (0409)US English, (04b0)Unicode.  Enhance that someday.
+            VerQueryValue(versionInfo, L"\\StringFileInfo\\040904b0\\FileVersion", &pVersionBlock, &pBlockSize);
+            gStVersionInfo.versionText = static_cast<const wchar_t*>(pVersionBlock);
 
-			// the code page is fixed to (0409)US English, (04b0)Unicode.  Enhance that someday.
-			VerQueryValue(versionInfo, L"\\StringFileInfo\\040904b0\\FileVersion", &pVersionBlock, &pBlockSize);
-			gStVersionInfo.versionText = static_cast<const wchar_t*>(pVersionBlock);
+            delete[] versionInfo;
 
-			delete[] versionInfo;
+            HWND staticTextHandle = GetDlgItem(hDlg, IDC_VERSION_TEXT);
+            std::wstring versionText = L"Version "+gStVersionInfo.versionText;
+            SetWindowText(staticTextHandle, versionText.c_str());
 
-			HWND staticTextHandle = GetDlgItem(hDlg, IDC_VERSION_TEXT);
-			std::wstring versionText = L"Version " + gStVersionInfo.versionText;
-			SetWindowText(staticTextHandle, versionText.c_str());
+            return TRUE;
+        }
 
-			return TRUE;
-		}
+        case WM_COMMAND:
+            if (LOWORD(wParam)==IDOK || LOWORD(wParam)==IDCANCEL) {
+                EndDialog(hDlg, LOWORD(wParam));
+                return TRUE;
+            }
+            break;
 
-		case WM_COMMAND:
-			if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
-			{
-				EndDialog(hDlg, LOWORD(wParam));
-				return TRUE;
-			}
-			break;
-
-		default:;
-		}
-		return FALSE;
-	}
+        default:;
+        }
+        return FALSE;
+    }
 }
 

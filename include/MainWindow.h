@@ -23,4 +23,5 @@ public:
 	WCHAR m_szMainWindowClass[MAX_LOAD_STRING]{ 0 };
     DWORD m_dwThreadId{};
     HANDLE m_hDesktopThread{};
+    BOOL m_isVisible{FALSE};
 };

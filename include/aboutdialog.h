@@ -1,17 +1,14 @@
 #pragma once
 
-#include <string>
-
 #include "framework.h"
 
+#include <string>
 
-namespace AboutDialog
-{
-	typedef struct tagVersionInfo {
-		std::wstring versionText;
-	} VERSION_INFO;
+namespace AboutDialog {
+    typedef struct tagVersionInfo {
+        std::wstring versionText;
+    } VERSION_INFO;
 
-	INT_PTR CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
-
+    INT_PTR CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 }
 

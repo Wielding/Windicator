@@ -1,10 +1,13 @@
 #pragma once
 
+#include <shared_mutex>
+
 namespace DesktopWatcher {
 
     struct DesktopWatcherData {
-        HWND hWnd;
-        BYTE desktopNumber;
+        HWND hWnd{};
+        BOOL keepGoing{TRUE};
+        std::shared_mutex lock{};
     };
 
 

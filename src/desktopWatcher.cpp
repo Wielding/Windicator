@@ -29,8 +29,21 @@ namespace DesktopWatcher {
                 &hKey
         );
 
-        while (true) {
-            // Create an event.
+        BOOL keepGoing = TRUE;
+
+        while (keepGoing) {
+
+            // Overcautious lock for end condition. This will probably only trigger if
+            // _TIDY_TIMEOUT is defined since we are likely Waiting for a registry change.
+            {
+                std::lock_guard lock(pData->lock);
+                keepGoing = pData->keepGoing;
+                if (!keepGoing) {
+                    continue;
+                }
+            }
+
+           // Create an event.
             auto hEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
 
             if (hEvent == nullptr) {
@@ -50,19 +63,35 @@ namespace DesktopWatcher {
                     return 8;
                 }
 
+                // This is an optional build definition to use a time-out to make sure we can catch the program exit
+                // so the registry handle can be closed.  It is probably not needed since this app will likely
+                // run the duration of your session so leaking a single registry handle is not an issue.  The system
+                // would eventually clean it up anyway.  If you want to use it uncomment the _TIDY_TIMEOUT definition
+                // in the CMakeLists.txt.  It will create a tiny increase in CPU usage since the thread will loop
+                // instead of an infinite wait for a registry change.
+#ifdef _TIDY_TIMEOUT
+                auto timeout = 500;
+#else
+                auto timeout = INFINITE;
+#endif
+                auto result = WaitForSingleObject(hEvent, timeout);
 
-                if (WaitForSingleObject(hEvent, INFINITE) == WAIT_FAILED) {
+                if (result == WAIT_FAILED) {
                     // TODO: handle error
+                }
+
+                if (result == WAIT_TIMEOUT) {
+                    continue;
                 }
             }
 
             first = FALSE;
 
+            // this buffer will allow for 256 virtual desktops.  That should satisfy just about everyone.
+            // We only have indicators for 10 so there you go.
             BYTE value[4096] = {};
             PVOID pvData = value;
-
             LPDWORD pdwType = nullptr;
-
             DWORD size = sizeof(value);
 
             // Get the current desktop ids
@@ -85,10 +114,10 @@ namespace DesktopWatcher {
             // create GUIDS from the binary data
             for (size_t i = 0; i < size / 16; i++) {
 
-                GUID g;
-                memcpy(&g, &static_cast<BYTE*>(pvData)[i * 16], 16);
+                GUID desktopId;
+                memcpy(&desktopId, &static_cast<BYTE*>(pvData)[i * 16], 16);
 
-                desktops.push_back(g);
+                desktops.push_back(desktopId);
             }
 
             size = sizeof(value);
@@ -104,17 +133,16 @@ namespace DesktopWatcher {
                     &size
             );
 
-            GUID c;
-            memcpy(&c, &static_cast<BYTE*>(pvData)[0], 16);
+            GUID currentDesktopId;
+            memcpy(&currentDesktopId, &static_cast<BYTE*>(pvData)[0], 16);
 
-            // check which GUID in desktops matches the current desktop.
+            // check which GUID in desktops matches the current desktop and send
+            // a message to the main window proc containing the desktop number in the
+            // low word of the LPARAM.
             auto idx = 1;
-            for (auto& i : desktops) {
-                if (i == c) {
-                    std::wstringstream ss;
-                    ss << L"On desktop #" << idx << std::endl;
+            for (auto& desktopId : desktops) {
+                if (desktopId == currentDesktopId) {
                     PostMessage(pData->hWnd, APP_WM_DESKTOP_CHANGE, 0, MAKELPARAM(idx, 0));
-                    OutputDebugString(ss.str().c_str());
                     continue;
                 }
                 idx++;
@@ -122,10 +150,8 @@ namespace DesktopWatcher {
 
         }
 
+        // We most likely will not hit this unless _TIDY_TIMEOUT is defined at compile time.
         RegCloseKey(hKey);
-
-
-
 
         return TRUE;
     }
