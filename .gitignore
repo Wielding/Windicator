@@ -1,0 +1,8 @@
+.vs
+.vscode
+.idea
+cmake-build-*
+out
+build
+WinApp.aps
+CMakeSettings.json
