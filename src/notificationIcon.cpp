@@ -17,12 +17,17 @@ namespace NotificationIcon {
 		nid.hWnd = hWndMain;
 		nid.uFlags = NIF_ICON | NIF_TIP | NIF_MESSAGE;
 
-#ifndef _DEBUG
-#ifdef _WIN64
-		nid.uFlags = nid.uFlags | NIF_GUID;
-		nid.guidItem = { 0x5d89e630, 0x3739, 0x4242, { 0x9d, 0xb7, 0xe3, 0xdb, 0x2d, 0xba, 0x2d, 0x3f } };		// {5D89E630-3739-4242-9DB7-E3DB2DBA2D3F}
-#endif
-#endif
+// It seems this is more trouble than it is worth since it prevents the icon from showing if the
+// application is moved after its first run unless you manually delete some registry entries that
+// Windows creates on the applications first run.  It makes sense for an application that has an
+// installer but not for an app that can be placed anywhere in the system.
+
+//#ifndef _DEBUG
+//#ifdef _WIN64
+//		nid.uFlags = nid.uFlags | NIF_GUID;
+//		nid.guidItem = { 0x5d89e630, 0x3739, 0x4242, { 0x9d, 0xb7, 0xe3, 0xdb, 0x2d, 0xba, 0x2d, 0x3f } };		// {5D89E630-3739-4242-9DB7-E3DB2DBA2D3F}
+//#endif
+//#endif
 
 		// Set the notification tip text
 		WCHAR szTitle[ARRAYSIZE(nid.szTip)];
