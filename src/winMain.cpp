@@ -7,9 +7,16 @@
 INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
         _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
 {
-    if (FAILED(CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED |
-            COINIT_DISABLE_OLE1DDE))) {
-        return FALSE;
+
+    // Don't allow more than one instance of the application
+    HANDLE mutex;
+    std::wstring mutexName = L"Windicator_Instance";
+
+    mutex = CreateMutex(nullptr, TRUE,mutexName.c_str());
+
+    if (GetLastError() == ERROR_ALREADY_EXISTS) {
+        MessageBox(nullptr, L"An instance of Windicator is already running", L"Windicator", MB_ICONEXCLAMATION);
+        return 8;
     }
 
     wchar_t szWindowName[MAX_LOAD_STRING];
@@ -36,7 +43,8 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
         }
     }
 
-    CoUninitialize();
+    ReleaseMutex(mutex);
+    CloseHandle(mutex);
 
     return 0;
 }
