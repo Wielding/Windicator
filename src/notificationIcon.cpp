@@ -66,13 +66,6 @@ namespace NotificationIcon {
         nid.hWnd = hWndMain;
         nid.uFlags = NIF_ICON | NIF_TIP | NIF_MESSAGE;
 
-#ifndef _DEBUG
-        #ifdef _WIN64
-		nid.uFlags = nid.uFlags | NIF_GUID;
-		nid.guidItem = { 0x5d89e630, 0x3739, 0x4242, { 0x9d, 0xb7, 0xe3, 0xdb, 0x2d, 0xba, 0x2d, 0x3f } };		// {5D89E630-3739-4242-9DB7-E3DB2DBA2D3F}
-#endif
-#endif
-
         // Set the notification tip text
         WCHAR szTitle[ARRAYSIZE(nid.szTip)];
         LoadStringW(hInst, IDS_APP_TITLE, szTitle, ARRAYSIZE(szTitle));
