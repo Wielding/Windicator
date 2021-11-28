@@ -9,8 +9,6 @@
 INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
         _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
 {
-
-    CoInitialize(nullptr);
     std::wstring mutexName = L"Windicator_Instance";
 
     HANDLE mutex = CreateMutex(nullptr, TRUE, mutexName.c_str());
@@ -22,7 +20,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
     wchar_t szWindowName[MAX_LOAD_STRING];
 
-    LoadStringW(hInstance, IDS_APP_TITLE, szWindowName, MAX_LOAD_STRING);
+    LoadString(hInstance, IDS_APP_TITLE, szWindowName, MAX_LOAD_STRING);
 
     MainWindow mainWindow;
 
@@ -46,8 +44,6 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
 
     ReleaseMutex(mutex);
     CloseHandle(mutex);
-
-    CoUninitialize();
 
     return 0;
 }

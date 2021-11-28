@@ -7,7 +7,7 @@
 
 namespace AboutDialog {
     // This is a global for others to access (e.g. version check logic)
-    VersionInfo gStVersionInfo{};
+    VersionInfo gstVersionInfo{};
 
     /// @brief AboutDialog window proc
     INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
@@ -15,9 +15,10 @@ namespace AboutDialog {
         UNREFERENCED_PARAMETER(lParam);
         switch (message) {
             case WM_INITDIALOG: {
+
                 // extract the version information from the resources
                 wchar_t moduleFileName[MAX_PATH];
-                GetModuleFileNameW(GetModuleHandle(nullptr), moduleFileName, MAX_PATH);
+                GetModuleFileName(GetModuleHandle(nullptr), moduleFileName, MAX_PATH);
                 DWORD ptr;
 
                 const auto versionInfoSize = GetFileVersionInfoSize(moduleFileName, &ptr);
@@ -30,12 +31,12 @@ namespace AboutDialog {
 
                 // the code page is fixed to (0409)US English, (04b0)Unicode.  Enhance that someday.
                 VerQueryValue(versionInfo, L"\\StringFileInfo\\040904b0\\FileVersion", &pVersionBlock, &pBlockSize);
-                gStVersionInfo.versionText = static_cast<const wchar_t*>(pVersionBlock);
+                gstVersionInfo.versionText = static_cast<const wchar_t*>(pVersionBlock);
 
                 delete[] versionInfo;
 
                 HWND staticTextHandle = GetDlgItem(hDlg, IDC_VERSION_TEXT);
-                std::wstring versionText = L"Version " + gStVersionInfo.versionText;
+                std::wstring versionText = L"Version " + gstVersionInfo.versionText;
                 SetWindowText(staticTextHandle, versionText.c_str());
 
                 return TRUE;

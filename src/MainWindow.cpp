@@ -7,16 +7,16 @@
 /// @param wc Pointer to window class structure
 void MainWindow::AmendWindowClass(WNDCLASSEXW* wc)
 {
-    wc->hIcon = LoadIcon(wc->hInstance, MAKEINTRESOURCE(IDI_APP_ICON));
+    wc->hIcon = LoadIcon(wc->hInstance, MAKEINTRESOURCE(IDI_SMALL_1));
     wc->hIconSm = LoadIcon(wc->hInstance, MAKEINTRESOURCE(IDI_SMALL));
-    wc->lpszMenuName = MAKEINTRESOURCEW(IDC_MAIN_MENU);
+    wc->lpszMenuName = MAKEINTRESOURCE(IDC_MAIN_MENU);
 }
 
 /// @brief return the window class name
 /// @return window class name
 PCWSTR MainWindow::ClassName() const
 {
-    LoadStringW(GetModuleHandle(nullptr), IDC_MAIN_MENU,
+    LoadString(GetModuleHandle(nullptr), IDC_MAIN_MENU,
             const_cast<LPWSTR>(m_szMainWindowClass), MAX_LOAD_STRING);
 
     return m_szMainWindowClass;
@@ -35,7 +35,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_CREATE:
             NotificationIcon::Add(m_hInstance, m_hWnd, 1);
 
-            watcher_data.hWnd = m_hWnd;
+            watcherData.hWnd = m_hWnd;
 
             // Start a thread that watches for Virtual Desktop registry changes
             // and posts messages (APP_WM_DESKTOP_CHANGE) to this window when they change.
@@ -43,7 +43,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                     nullptr,
                     0,
                     DesktopWatcher::DesktopWatcherThreadProc,
-                    &watcher_data,
+                    &watcherData,
                     0,
                     &m_dwThreadId
             );
@@ -57,8 +57,8 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                 case IDM_NOTIFY_EXIT:
                 case IDM_EXIT: {
-                    std::lock_guard lock(watcher_data.lock);
-                    watcher_data.keepGoing = FALSE;
+                    std::lock_guard lock(watcherData.lock);
+                    watcherData.keepGoing = FALSE;
                 }
 #ifdef _TIDY_TIMEOUT
                     WaitForSingleObject(m_hDesktopThread, 2000);

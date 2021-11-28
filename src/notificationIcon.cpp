@@ -9,7 +9,7 @@ namespace NotificationIcon {
 
     NOTIFYICONDATA nid = {};
     HMENU hMenuTrackPopup;
-    HMENU hNotifyMenu; // top-level menu
+    HMENU hNotifyMenu;
 
     /// @brief Add the notification icon to the system tray
     /// @param hInst The application instance
@@ -22,7 +22,6 @@ namespace NotificationIcon {
         nid.hWnd = hWndMain;
         nid.uFlags = NIF_ICON | NIF_TIP | NIF_MESSAGE;
 
-        // Set the notification tip text
         WCHAR szTitle[ARRAYSIZE(nid.szTip)];
         LoadStringW(hInst, IDS_APP_TITLE, szTitle, ARRAYSIZE(szTitle));
         StringCchCopy(nid.szTip, ARRAYSIZE(nid.szTip), szTitle);
@@ -39,7 +38,7 @@ namespace NotificationIcon {
                     nullptr, GetLastError(),
                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), err, 255, nullptr);
 
-            OutputDebugStringW(err);
+            OutputDebugString(err);
             MessageBox(hWndMain, err, L"Windicator Error", MB_ICONERROR);
         }
 
@@ -87,8 +86,6 @@ namespace NotificationIcon {
     /// @param point The location to show the menu
     VOID APIENTRY DisplayContextMenu(HINSTANCE hInst, HWND hwnd, POINT point)
     {
-        // Load the menu resource.
-
         if ((hNotifyMenu = LoadMenu(hInst, MAKEINTRESOURCE(IDR_NOTIFY_MENU))) ==
                 nullptr)
             return;
@@ -103,7 +100,6 @@ namespace NotificationIcon {
                 TPM_BOTTOMALIGN | TPM_RIGHTALIGN | TPM_RIGHTBUTTON, point.x,
                 point.y, 0, hwnd, nullptr);
 
-        // Destroy the menu.
         DestroyMenu(hNotifyMenu);
     }
 
@@ -122,7 +118,7 @@ namespace NotificationIcon {
 //                        lParam);
                 break;
             case WM_RBUTTONUP:
-                POINT pt; // location of mouse click
+                POINT pt;
                 GetCursorPos(&pt);
                 DisplayContextMenu(hInst, hWnd, pt);
                 break;

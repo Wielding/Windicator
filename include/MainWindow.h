@@ -10,7 +10,7 @@ protected:
 
     [[nodiscard]] PCWSTR ClassName() const override;
 
-    DesktopWatcher::DesktopWatcherData watcher_data{};
+    DesktopWatcher::DesktopWatcherData watcherData{};
 
 public:
     virtual ~MainWindow() = default;

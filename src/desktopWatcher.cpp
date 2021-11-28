@@ -12,7 +12,7 @@ namespace DesktopWatcher {
     VOID ShowErrorMessageBox(HWND hParent, DWORD errorCode)
     {
         wchar_t errorMessage[256] = {};
-        FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_FROM_HMODULE,
+        FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_FROM_HMODULE,
                 nullptr, errorCode,
                 MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errorMessage, sizeof(errorMessage), nullptr);
 
@@ -70,7 +70,7 @@ namespace DesktopWatcher {
                 continue;
             }
 
-            // Watch the registry key for a change of value.
+            // Watch the registry key for a change of buffer.
             if (!first) {
                 status = RegNotifyChangeKeyValue(hKey,
                         TRUE,
@@ -88,8 +88,8 @@ namespace DesktopWatcher {
                 // so the registry handle can be closed.  It is probably not needed since this app will likely
                 // run the duration of your session so leaking a single registry handle is not an issue.  The system
                 // would eventually clean it up anyway.  If you want to use it uncomment the _TIDY_TIMEOUT definition
-                // in the CMakeLists.txt.  It will create a tiny increase in CPU usage since the thread will loop
-                // instead of an infinite wait event for a registry change.
+                // in the CMakeLists.txt before you build.  It will create a tiny increase in CPU usage since the
+                // thread will loop instead of an infinite wait event for a registry change.
 #ifdef _TIDY_TIMEOUT
                 auto timeout = 500;
 #else
@@ -112,10 +112,10 @@ namespace DesktopWatcher {
 
             // This buffer will allow for 256 virtual desktops.  That should satisfy just about everyone.
             // We only have indicators for 10 so there you go.
-            BYTE value[4096] = {};
-            PVOID pvData = value;
+            BYTE buffer[4096] = {};
+            PVOID pvData = buffer;
             LPDWORD pdwType = nullptr;
-            DWORD size = sizeof(value);
+            DWORD size = sizeof(buffer);
 
             // Get the current desktop ids
             status = RegGetValue(
@@ -135,7 +135,7 @@ namespace DesktopWatcher {
 
             std::vector<GUID> desktops;
 
-            // create GUIDS from the binary data retrieved from the registry
+            // create list of desktop GUIDS using the binary data retrieved from the registry
             for (size_t i = 0; i < size / 16; i++) {
 
                 GUID desktopId;
@@ -144,7 +144,7 @@ namespace DesktopWatcher {
                 desktops.push_back(desktopId);
             }
 
-            size = sizeof(value);
+            size = sizeof(buffer);
 
             // get the current virtual desktop id
             status = RegGetValue(
