@@ -11,6 +11,11 @@ namespace NotificationIcon {
     HMENU hMenuTrackPopup;
     HMENU hNotifyMenu; // top-level menu
 
+    /// @brief Add the notification icon to the system tray
+    /// @param hInst The application instance
+    /// @param hWndMain The parent window handle
+    /// @param nDesktop The current desktop number
+    /// @return result
     HRESULT Add(HINSTANCE hInst, HWND hWndMain, UINT nDesktop)
     {
         nid.cbSize = sizeof(nid);
@@ -41,6 +46,11 @@ namespace NotificationIcon {
         return result;
     }
 
+    /// @brief Modify an existing notification icon
+    /// @param hInst The application instance
+    /// @param hWndMain The parent window handle
+    /// @param nDesktop The current desktop number
+    /// @return result
     HRESULT Modify(HINSTANCE hInst, HWND hWndMain, UINT nDesktop)
     {
         nid.cbSize = sizeof(nid);
@@ -71,6 +81,10 @@ namespace NotificationIcon {
         return Shell_NotifyIcon(NIM_DELETE, &nid) ? S_OK : E_FAIL;
     }
 
+    /// @brief Display the notification icon context menu
+    /// @param hInst Application instance handle
+    /// @param hwnd Parent window handle
+    /// @param point The location to show the menu
     VOID APIENTRY DisplayContextMenu(HINSTANCE hInst, HWND hwnd, POINT point)
     {
         // Load the menu resource.
@@ -93,6 +107,8 @@ namespace NotificationIcon {
         DestroyMenu(hNotifyMenu);
     }
 
+    /// @brief The notification icon window proc
+    /// @return result
     INT_PTR CALLBACK WndProc(HINSTANCE hInst, HWND hWnd,
             UINT message, WPARAM wParam,
             LPARAM lParam)

@@ -3,8 +3,8 @@
 #include "../include/messages.h"
 #include "../include/notificationIcon.h"
 
-/// @brief set window class data
-/// @param wc pointer to window class structure
+/// @brief Set window class data
+/// @param wc Pointer to window class structure
 void MainWindow::AmendWindowClass(WNDCLASSEXW* wc)
 {
     wc->hIcon = LoadIcon(wc->hInstance, MAKEINTRESOURCE(IDI_APP_ICON));
@@ -49,9 +49,6 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             );
             break;
 
-        case APP_WM_ICON_NOTIFY:
-            return NotificationIcon::WndProc(GetModuleHandle(nullptr), hWnd, uMsg, wParam, lParam);
-
         case WM_COMMAND: {
             switch (LOWORD(wParam)) {
                 case IDM_ABOUT:
@@ -71,7 +68,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                     break;
                 case IDM_NOTIFY_TOGGLE_VISIBLITY:
                     m_isVisible = !m_isVisible;
-                    ShowWindow(m_hWnd, (m_isVisible ? SW_SHOW : SW_HIDE));
+                    Show(m_isVisible ? SW_SHOW : SW_HIDE);
                     break;
                 default:
                     return DefWindowProc(hWnd, uMsg, wParam, lParam);
@@ -91,6 +88,9 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             EndPaint(hWnd, &ps);
         }
             return 0;
+
+        case APP_WM_ICON_NOTIFY:
+            return NotificationIcon::WndProc(GetModuleHandle(nullptr), hWnd, uMsg, wParam, lParam);
 
         case APP_WM_DESKTOP_CHANGE: {
             auto id = LOWORD(lParam);

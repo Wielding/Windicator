@@ -7,6 +7,7 @@ namespace AboutDialog {
     // This is a global for others to access (e.g. version check logic)
     VersionInfo gStVersionInfo{};
 
+    /// @brief AboutDialog window proc
     INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     {
         UNREFERENCED_PARAMETER(lParam);
