@@ -116,9 +116,10 @@ namespace NotificationIcon {
         UNREFERENCED_PARAMETER(lParam);
         switch (lParam) {
             case WM_LBUTTONDBLCLK:
-                SendMessage(hWnd, WM_COMMAND,
-                        MAKELPARAM(IDM_NOTIFY_TOGGLE_VISIBLITY, HIWORD(wParam)),
-                        lParam);
+// Disabled for now
+//                SendMessage(hWnd, WM_COMMAND,
+//                        MAKELPARAM(IDM_NOTIFY_TOGGLE_VISIBLITY, HIWORD(wParam)),
+//                        lParam);
                 break;
             case WM_RBUTTONUP:
                 POINT pt; // location of mouse click

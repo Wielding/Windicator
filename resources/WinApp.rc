@@ -79,6 +79,8 @@ IDR_NOTIFY_MENU MENU
 BEGIN
     POPUP "ContextMenu"
     BEGIN
+        MENUITEM "About",                       IDM_ABOUT
+        MENUITEM SEPARATOR
         MENUITEM "Exit",                        IDM_NOTIFY_EXIT
     END
 END
