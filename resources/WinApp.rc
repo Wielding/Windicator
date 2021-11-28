@@ -112,7 +112,7 @@ BEGIN
     LTEXT           "Windicator, Version 1.0",IDC_VERSION_TEXT,42,14,114,8,SS_NOPREFIX
     LTEXT           "Copyright (c) 2021",IDC_STATIC,42,26,114,8
     DEFPUSHBUTTON   "OK",IDOK,114,58,50,14,WS_GROUP
-    CONTROL         "<a href=""https://wielding.dev"">Wielding Logic</a>",IDC_SYSLINK_ABOUT,
+    CONTROL         "<a href=""https://wielding.dev"">Wielding Logic</a>",IDC_ABOUT_WEBLINK,
                     "SysLink",WS_TABSTOP,42,39,60,14
 END
 

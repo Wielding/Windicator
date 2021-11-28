@@ -118,7 +118,7 @@ namespace NotificationIcon {
             case WM_LBUTTONDBLCLK:
 // Disabled for now
 //                SendMessage(hWnd, WM_COMMAND,
-//                        MAKELPARAM(IDM_NOTIFY_TOGGLE_VISIBLITY, HIWORD(wParam)),
+//                        MAKELPARAM(IDM_NOTIFY_TOGGLE_VISIBILITY, HIWORD(wParam)),
 //                        lParam);
                 break;
             case WM_RBUTTONUP:

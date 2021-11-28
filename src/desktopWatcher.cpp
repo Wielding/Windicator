@@ -50,7 +50,7 @@ namespace DesktopWatcher {
 
         while (keepGoing) {
 
-            // This will most probably only trigger if _TIDY_TIMEOUT is defined since we are likely
+            // This will probably only trigger if _TIDY_TIMEOUT is defined since we are likely
             // waiting for a registry change event when the parent process sets keepGoing to FALSE
             // and terminates.
             {
@@ -110,7 +110,7 @@ namespace DesktopWatcher {
 
             first = FALSE;
 
-            // this buffer will allow for 256 virtual desktops.  That should satisfy just about everyone.
+            // This buffer will allow for 256 virtual desktops.  That should satisfy just about everyone.
             // We only have indicators for 10 so there you go.
             BYTE value[4096] = {};
             PVOID pvData = value;
@@ -135,7 +135,7 @@ namespace DesktopWatcher {
 
             std::vector<GUID> desktops;
 
-            // create GUIDS from the binary data
+            // create GUIDS from the binary data retrieved from the registry
             for (size_t i = 0; i < size / 16; i++) {
 
                 GUID desktopId;

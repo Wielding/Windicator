@@ -66,7 +66,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                     NotificationIcon::Remove();
                     DestroyWindow(hWnd);
                     break;
-                case IDM_NOTIFY_TOGGLE_VISIBLITY:
+                case IDM_NOTIFY_TOGGLE_VISIBILITY:
                     m_isVisible = !m_isVisible;
                     Show(m_isVisible ? SW_SHOW : SW_HIDE);
                     break;

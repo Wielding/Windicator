@@ -26,8 +26,8 @@
 #define IDI_SMALL_0                     141
 #define IDI_SMALL_X                     142
 #define IDC_VERSION_TEXT                1000
-#define IDC_SYSLINK_ABOUT               1001
-#define IDM_NOTIFY_TOGGLE_VISIBLITY     32773
+#define IDC_ABOUT_WEBLINK               1001
+#define IDM_NOTIFY_TOGGLE_VISIBILITY     32773
 #define ID_CONTEXTMENU_ABOUT            32774
 #define IDC_STATIC                      -1
 
