@@ -12,12 +12,19 @@ add_compile_definitions(_UNICODE UNICODE)
 #
 #add_compile_definitions(_TIDY_TIMEOUT)
 
-add_link_options(/SUBSYSTEM:WINDOWS /DYNAMICBASE "Version.lib" /MACHINE:X64)
+add_link_options(
+    /SUBSYSTEM:WINDOWS
+    /DYNAMICBASE 
+    Version.lib
+    Comctl32.lib
+    /MACHINE:X64
+)
 
 add_executable(
         ${PROJECT_NAME}
         resources/resource.h
         resources/WinApp.rc
+        resources/app.manifest
         include/messages.h
         include/aboutDialog.h
         src/aboutDialog.cpp

@@ -1,7 +1,9 @@
 #include "../include/aboutdialog.h"
 #include "../resources/resource.h"
 
+#include <shellapi.h>
 #include <string>
+#include <CommCtrl.h>
 
 namespace AboutDialog {
     // This is a global for others to access (e.g. version check logic)
@@ -45,6 +47,20 @@ namespace AboutDialog {
                     return TRUE;
                 }
                 break;
+
+            case WM_NOTIFY:
+            {
+                switch (reinterpret_cast<LPNMHDR>(lParam)->code)
+                {
+                    case NM_CLICK:
+                    case NM_RETURN:
+                        auto* pNmLink = reinterpret_cast<PNMLINK>(lParam);
+                        std::wstring url = pNmLink->item.szUrl;
+
+                        ShellExecute(nullptr, L"open", url.c_str(), nullptr, nullptr, SW_SHOW);
+                        break;
+                }
+            }
 
             default:;
         }

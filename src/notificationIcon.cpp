@@ -1,4 +1,4 @@
-﻿#include "../include/notificationIcon.h"
+#include "../include/notificationIcon.h"
 #include "../include/messages.h"
 #include "../resources/resource.h"
 
@@ -40,7 +40,7 @@ namespace NotificationIcon {
                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), err, 255, nullptr);
 
             OutputDebugStringW(err);
-            MessageBox(hWndMain, err, L"Winidicator Error", MB_ICONERROR);
+            MessageBox(hWndMain, err, L"Windicator Error", MB_ICONERROR);
         }
 
         return result;
@@ -75,7 +75,7 @@ namespace NotificationIcon {
     }
 
     /// @brief remove the notification icon from the tray
-    /// @return HRESULT
+    /// @return result from Shell_NotifyIcon
     HRESULT Remove()
     {
         return Shell_NotifyIcon(NIM_DELETE, &nid) ? S_OK : E_FAIL;
