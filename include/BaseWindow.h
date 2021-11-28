@@ -67,6 +67,11 @@ public:
         return m_hWnd ? TRUE : FALSE;
     }
 
+    void Show(int nShowCmd) const
+    {
+        ShowWindow(m_hWnd, nShowCmd);
+    }
+
 protected:
     HWND m_hWnd;
 

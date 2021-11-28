@@ -10,7 +10,7 @@ namespace DesktopWatcher {
         std::shared_mutex lock{};
     };
 
+    VOID ShowErrorMessageBox(HWND hParent, DWORD errorCode);
 
     DWORD WINAPI DesktopWatcherThreadProc(LPVOID lParam);
-
 }

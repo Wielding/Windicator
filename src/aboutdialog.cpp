@@ -5,7 +5,7 @@
 
 namespace AboutDialog {
     // This is left outside as a global for others to access (e.g. version check logic)
-    VERSION_INFO gStVersionInfo{};  // NOLINT(clang-diagnostic-exit-time-destructors)
+    VERSION_INFO gStVersionInfo{};  
 
     INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     {

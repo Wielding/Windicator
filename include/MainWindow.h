@@ -18,8 +18,6 @@ public:
 
 	LRESULT HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam) override;
 
-	void Show(int nShowCmd) const;
-
 	WCHAR m_szMainWindowClass[MAX_LOAD_STRING]{ 0 };
     DWORD m_dwThreadId{};
     HANDLE m_hDesktopThread{};
