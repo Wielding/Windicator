@@ -1,6 +1,7 @@
 #include "../include/framework.h"
 #include "../include/desktopWatcher.h"
 #include "../include/messages.h"
+
 #include <vector>
 
 namespace DesktopWatcher {
@@ -13,7 +14,7 @@ namespace DesktopWatcher {
                 MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), errorMessage, sizeof(errorMessage), nullptr);
 
         OutputDebugString(errorMessage);
-        MessageBox(hParent, errorMessage, L"Winidicator Error", MB_ICONERROR);
+        MessageBox(hParent, errorMessage, L"Windicator Error", MB_ICONERROR);
 
     }
 
@@ -44,7 +45,8 @@ namespace DesktopWatcher {
         while (keepGoing) {
 
             // This will most probably only trigger if _TIDY_TIMEOUT is defined since we are likely
-            // waiting for a registry change event when the process terminates.
+            // waiting for a registry change event when the parent process sets keepGoing to FALSE
+            // and terminates.
             {
                 std::lock_guard lock(pData->lock);
                 keepGoing = pData->keepGoing;
@@ -58,7 +60,8 @@ namespace DesktopWatcher {
 
             if (hEvent==nullptr) {
                 ShowErrorMessageBox(pData->hWnd, GetLastError());
-                return 8;
+                keepGoing = FALSE;
+                continue;
             }
 
             // Watch the registry key for a change of value.
@@ -71,7 +74,8 @@ namespace DesktopWatcher {
 
                 if (status!=ERROR_SUCCESS) {
                     ShowErrorMessageBox(pData->hWnd, GetLastError());
-                    return 8;
+                    keepGoing = FALSE;
+                    continue;
                 }
 
                 // This is an optional build definition to use a time-out to make sure we can catch the program exit
@@ -89,7 +93,8 @@ namespace DesktopWatcher {
 
                 if (result==WAIT_FAILED) {
                     ShowErrorMessageBox(pData->hWnd, GetLastError());
-                    return 8;
+                    keepGoing = FALSE;
+                    continue;
                 }
 
                 if (result==WAIT_TIMEOUT) {
@@ -118,8 +123,8 @@ namespace DesktopWatcher {
             );
 
             if (ERROR_SUCCESS!=status) {
-                ShowErrorMessageBox(pData->hWnd, GetLastError());
-                return 8;
+                keepGoing = FALSE;
+                continue;
             }
 
             std::vector<GUID> desktops;
@@ -162,7 +167,8 @@ namespace DesktopWatcher {
             }
         }
 
-        // We most likely will not hit this unless _TIDY_TIMEOUT is defined at compile time.
+        // We most likely will not hit this unless _TIDY_TIMEOUT is defined at compile time or
+        // an error condition occurred.
         RegCloseKey(hKey);
 
         return TRUE;
