@@ -12,7 +12,6 @@ namespace AboutDialog {
     /// @brief AboutDialog window proc
     INT_PTR CALLBACK DlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
     {
-        UNREFERENCED_PARAMETER(lParam);
         switch (message) {
             case WM_INITDIALOG: {
 

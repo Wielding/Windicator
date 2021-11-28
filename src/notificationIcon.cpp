@@ -109,10 +109,9 @@ namespace NotificationIcon {
             UINT message, WPARAM wParam,
             LPARAM lParam)
     {
-        UNREFERENCED_PARAMETER(lParam);
         switch (lParam) {
             case WM_LBUTTONDBLCLK:
-// Disabled for now
+// Disabled for now.  Might be re-enabled if configuration options are added.
 //                SendMessage(hWnd, WM_COMMAND,
 //                        MAKELPARAM(IDM_NOTIFY_TOGGLE_VISIBILITY, HIWORD(wParam)),
 //                        lParam);
