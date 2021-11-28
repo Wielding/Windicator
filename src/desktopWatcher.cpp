@@ -6,6 +6,9 @@
 
 namespace DesktopWatcher {
 
+    /// @brief Display a MessageBox with the translated error from errorCode
+    /// @param hParent Parent window handle
+    /// @param errorCode Error code to translate
     VOID ShowErrorMessageBox(HWND hParent, DWORD errorCode)
     {
         wchar_t errorMessage[256] = {};
@@ -18,6 +21,9 @@ namespace DesktopWatcher {
 
     }
 
+    /// @brief Thread to watch for registry changes related to Virtual Desktops
+    /// @param lParam Pointer to a DesktopWatcher structure.
+    /// @return result
     DWORD DesktopWatcherThreadProc(LPVOID lParam)
     {
         auto* const pData = static_cast<DesktopWatcherData*>(lParam);
@@ -58,7 +64,7 @@ namespace DesktopWatcher {
             // Create an event to wait on for the registry changes
             auto hEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
 
-            if (hEvent==nullptr) {
+            if (hEvent == nullptr) {
                 ShowErrorMessageBox(pData->hWnd, GetLastError());
                 keepGoing = FALSE;
                 continue;
@@ -72,7 +78,7 @@ namespace DesktopWatcher {
                         hEvent,
                         TRUE);
 
-                if (status!=ERROR_SUCCESS) {
+                if (status != ERROR_SUCCESS) {
                     ShowErrorMessageBox(pData->hWnd, GetLastError());
                     keepGoing = FALSE;
                     continue;
@@ -91,13 +97,13 @@ namespace DesktopWatcher {
 #endif
                 auto result = WaitForSingleObject(hEvent, timeout);
 
-                if (result==WAIT_FAILED) {
+                if (result == WAIT_FAILED) {
                     ShowErrorMessageBox(pData->hWnd, GetLastError());
                     keepGoing = FALSE;
                     continue;
                 }
 
-                if (result==WAIT_TIMEOUT) {
+                if (result == WAIT_TIMEOUT) {
                     continue;
                 }
             }
@@ -122,7 +128,7 @@ namespace DesktopWatcher {
                     &size
             );
 
-            if (ERROR_SUCCESS!=status) {
+            if (ERROR_SUCCESS != status) {
                 keepGoing = FALSE;
                 continue;
             }
@@ -130,10 +136,10 @@ namespace DesktopWatcher {
             std::vector<GUID> desktops;
 
             // create GUIDS from the binary data
-            for (size_t i = 0; i<size/16; i++) {
+            for (size_t i = 0; i < size / 16; i++) {
 
                 GUID desktopId;
-                memcpy(&desktopId, &static_cast<BYTE*>(pvData)[i*16], 16);
+                memcpy(&desktopId, &static_cast<BYTE*>(pvData)[i * 16], 16);
 
                 desktops.push_back(desktopId);
             }
@@ -159,7 +165,7 @@ namespace DesktopWatcher {
             // low word of the LPARAM.
             auto idx = 1;
             for (auto& desktopId: desktops) {
-                if (desktopId==currentDesktopId) {
+                if (desktopId == currentDesktopId) {
                     PostMessage(pData->hWnd, APP_WM_DESKTOP_CHANGE, 0, MAKELPARAM(idx, 0));
                     continue;
                 }
@@ -173,6 +179,4 @@ namespace DesktopWatcher {
 
         return TRUE;
     }
-
-
 }

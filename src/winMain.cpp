@@ -12,7 +12,7 @@ INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
     HANDLE mutex;
     std::wstring mutexName = L"Windicator_Instance";
 
-    mutex = CreateMutex(nullptr, TRUE,mutexName.c_str());
+    mutex = CreateMutex(nullptr, TRUE, mutexName.c_str());
 
     if (GetLastError() == ERROR_ALREADY_EXISTS) {
         MessageBox(nullptr, L"An instance of Windicator is already running", L"Windicator", MB_ICONEXCLAMATION);

@@ -17,7 +17,7 @@ public:
     {
         DerivedType* pThis;
 
-        if (uMsg==WM_NCCREATE) {
+        if (uMsg == WM_NCCREATE) {
             auto* pCreate = reinterpret_cast<CREATESTRUCT*>(lParam);
             pThis = static_cast<DerivedType*>(pCreate->lpCreateParams);
             SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(pThis));

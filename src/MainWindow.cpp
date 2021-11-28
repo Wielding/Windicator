@@ -17,7 +17,7 @@ void MainWindow::AmendWindowClass(WNDCLASSEXW* wc)
 PCWSTR MainWindow::ClassName() const
 {
     LoadStringW(GetModuleHandle(nullptr), IDC_MAIN_MENU,
-        const_cast<LPWSTR>(m_szMainWindowClass), MAX_LOAD_STRING);
+            const_cast<LPWSTR>(m_szMainWindowClass), MAX_LOAD_STRING);
 
     return m_szMainWindowClass;
 }
@@ -26,7 +26,7 @@ PCWSTR MainWindow::ClassName() const
 /// @param uMsg message
 /// @param wParam WPARAM
 /// @param lParam LPARAM
-/// @return LRESULT
+/// @return result
 LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     auto* const hWnd = m_hWnd;
@@ -40,12 +40,12 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             // Start a thread that watches for Virtual Desktop registry changes
             // and posts messages (APP_WM_DESKTOP_CHANGE) to this window when they change.
             m_hDesktopThread = CreateThread(
-                nullptr,
-                0,
-                DesktopWatcher::DesktopWatcherThreadProc,
-                &watcher_data,
-                0,
-                &m_dwThreadId
+                    nullptr,
+                    0,
+                    DesktopWatcher::DesktopWatcherThreadProc,
+                    &watcher_data,
+                    0,
+                    &m_dwThreadId
             );
             break;
 
@@ -53,7 +53,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             return NotificationIcon::WndProc(GetModuleHandle(nullptr), hWnd, uMsg, wParam, lParam);
 
         case WM_COMMAND: {
-            switch (const int wmId = LOWORD(wParam)) {
+            switch (LOWORD(wParam)) {
                 case IDM_ABOUT:
                     DialogBox(GetModuleHandle(nullptr), MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, AboutDialog::DlgProc);
                     break;
@@ -64,11 +64,11 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                     watcher_data.keepGoing = FALSE;
                 }
 #ifdef _TIDY_TIMEOUT
-                             WaitForSingleObject(m_hDesktopThread, 2000);
+                    WaitForSingleObject(m_hDesktopThread, 2000);
 #endif
-                             NotificationIcon::Remove();
-                             DestroyWindow(hWnd);
-                             break;
+                    NotificationIcon::Remove();
+                    DestroyWindow(hWnd);
+                    break;
                 case IDM_NOTIFY_TOGGLE_VISIBLITY:
                     m_isVisible = !m_isVisible;
                     ShowWindow(m_hWnd, (m_isVisible ? SW_SHOW : SW_HIDE));
@@ -77,7 +77,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                     return DefWindowProc(hWnd, uMsg, wParam, lParam);
             }
         }
-                       break;
+            break;
 
         case WM_DESTROY: {
             PostQuitMessage(0);
@@ -90,7 +90,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             FillRect(hdc, &ps.rcPaint, reinterpret_cast<HBRUSH>((COLOR_WINDOW + 1)));
             EndPaint(hWnd, &ps);
         }
-                     return 0;
+            return 0;
 
         case APP_WM_DESKTOP_CHANGE: {
             auto id = LOWORD(lParam);
@@ -98,7 +98,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             NotificationIcon::Modify(m_hInstance, m_hWnd, id);
         }
 
-                                  return 0;
+            return 0;
 
         default:;
     }

@@ -5,9 +5,10 @@
 #include <string>
 
 namespace AboutDialog {
-    typedef struct tagVersionInfo {
+
+    struct VersionInfo {
         std::wstring versionText;
-    } VERSION_INFO;
+    };
 
     INT_PTR CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 }

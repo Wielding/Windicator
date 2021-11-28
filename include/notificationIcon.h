@@ -4,14 +4,15 @@
 
 namespace NotificationIcon {
 
-	HRESULT Add(HINSTANCE hInst, HWND hWndMain, UINT nDesktop);
+    HRESULT Add(HINSTANCE hInst, HWND hWndMain, UINT nDesktop);
+
     HRESULT Modify(HINSTANCE hInst, HWND hWndMain, UINT nDesktop);
 
-	HRESULT Remove();
+    HRESULT Remove();
 
-	INT_PTR CALLBACK WndProc(HINSTANCE hInst, HWND hWnd,
-		UINT message, WPARAM wParam,
-		LPARAM lParam);
+    INT_PTR CALLBACK WndProc(HINSTANCE hInst, HWND hWnd,
+            UINT message, WPARAM wParam,
+            LPARAM lParam);
 
-	VOID APIENTRY DisplayContextMenu(HINSTANCE hInst, HWND hwnd, POINT point);
+    VOID APIENTRY DisplayContextMenu(HINSTANCE hInst, HWND hwnd, POINT point);
 }

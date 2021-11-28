@@ -22,12 +22,12 @@ namespace NotificationIcon {
         LoadStringW(hInst, IDS_APP_TITLE, szTitle, ARRAYSIZE(szTitle));
         StringCchCopy(nid.szTip, ARRAYSIZE(nid.szTip), szTitle);
 
-        nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_SMALL_START+nDesktop));
+        nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_SMALL_START + nDesktop));
         nid.uCallbackMessage = APP_WM_ICON_NOTIFY;
 
         auto result = Shell_NotifyIcon(NIM_ADD, &nid) ? S_OK : E_FAIL;
 
-        if (result==E_FAIL) {
+        if (result == E_FAIL) {
             wchar_t err[256];
             memset(err, 0, 256);
             FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_FROM_HMODULE,
@@ -52,11 +52,11 @@ namespace NotificationIcon {
         LoadStringW(hInst, IDS_APP_TITLE, szTitle, ARRAYSIZE(szTitle));
         StringCchCopy(nid.szTip, ARRAYSIZE(nid.szTip), szTitle);
 
-        if (nDesktop>10) {
+        if (nDesktop > 10) {
             nDesktop = 11;
         }
 
-        nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_SMALL_START+nDesktop));
+        nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_SMALL_START + nDesktop));
         nid.uCallbackMessage = APP_WM_ICON_NOTIFY;
 
         auto result = Shell_NotifyIcon(NIM_MODIFY, &nid) ? S_OK : E_FAIL;
@@ -75,7 +75,7 @@ namespace NotificationIcon {
     {
         // Load the menu resource.
 
-        if ((hNotifyMenu = LoadMenu(hInst, MAKEINTRESOURCE(IDR_NOTIFY_MENU)))==
+        if ((hNotifyMenu = LoadMenu(hInst, MAKEINTRESOURCE(IDR_NOTIFY_MENU))) ==
                 nullptr)
             return;
 
@@ -99,18 +99,18 @@ namespace NotificationIcon {
     {
         UNREFERENCED_PARAMETER(lParam);
         switch (lParam) {
-        case WM_LBUTTONDBLCLK:
-            SendMessage(hWnd, WM_COMMAND,
-                    MAKELPARAM(IDM_NOTIFY_TOGGLE_VISIBLITY, HIWORD(wParam)),
-                    lParam);
-            break;
-        case WM_RBUTTONUP:
-            POINT pt; // location of mouse click
-            GetCursorPos(&pt);
-            DisplayContextMenu(hInst, hWnd, pt);
-            break;
-        default:
-            return DefWindowProc(hWnd, message, wParam, lParam);
+            case WM_LBUTTONDBLCLK:
+                SendMessage(hWnd, WM_COMMAND,
+                        MAKELPARAM(IDM_NOTIFY_TOGGLE_VISIBLITY, HIWORD(wParam)),
+                        lParam);
+                break;
+            case WM_RBUTTONUP:
+                POINT pt; // location of mouse click
+                GetCursorPos(&pt);
+                DisplayContextMenu(hInst, hWnd, pt);
+                break;
+            default:
+                return DefWindowProc(hWnd, message, wParam, lParam);
         }
 
         return 0;
