@@ -5,6 +5,7 @@ Trojan:Win32/Wacatac.B!ml. I have tried submitting it as a false positive, but I
 through. If you still want to use it I would suggest building it yourself or put in an exception in Windows Defender
 which I don't recommend.**
 
+
 This is a simple Windows 11 application that shows an indicator in the system tray displaying the current virtual
 desktop number. It does not work on Windows 10 due to Microsoft changing the registry keys. It maxes out at 10 virtual
 desktops since anything more than 1 digit is difficult to show nicely in the tray icon. Desktop 10 is shown as '0' and
