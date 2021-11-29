@@ -1,10 +1,9 @@
 # Windicator
 
 **Windows Defender is reporting that this executable contains Trojan:Win32/Sabsik.FL.A!ml and if not that  
-Trojan:Win32/Wacatac.B!ml. I have tried submitting it as a false positive, but I don't know if that will ever go
-through. If you still want to use it I would suggest building it yourself or put in an exception in Windows Defender
-which I don't recommend.**
-
+Trojan:Win32/Wacatac.B!ml or even Win32/Wacapew.C!ml. I have tried submitting it as a false positive, but I don't know
+if that will ever go through. If want to use it you will have to build it yourself since I have removed the
+releases until I can sort this out**
 
 This is a simple Windows 11 application that shows an indicator in the system tray displaying the current virtual
 desktop number. It does not work on Windows 10 due to Microsoft changing the registry keys. It maxes out at 10 virtual
