@@ -1,9 +1,15 @@
 # Windicator
 
-This is a simple Windows application that shows an indicator in the system tray displaying the current virtual desktop
-number. It maxes out at 10 virtual desktops since anything more than 1 digit is difficult to show nicely in the tray
-icon. Desktop 10 is shown as '0' and Anything past that displays an '*'. If you use more than 10 virtual desktops I
-think you might have a workflow problem to address.
+**Windows Defender is reporting that this executable contains Trojan:Win32/Sabsik.FL.A!ml and if not that  
+Trojan:Win32/Wacatac.B!ml. I have tried submitting it as a false positive, but I don't know if that will ever go
+through. If you still want to use it I would suggest building it yourself or put in an exception in Windows Defender
+which I don't recommend.**
+
+This is a simple Windows 11 application that shows an indicator in the system tray displaying the current virtual
+desktop number. It does not work on Windows 10 due to Microsoft changing the registry keys. It maxes out at 10 virtual
+desktops since anything more than 1 digit is difficult to show nicely in the tray icon. Desktop 10 is shown as '0' and
+Anything past that displays an '*'. If you use more than 10 virtual desktops I think you might have a workflow problem
+to address.
 
 The application monitors the registry for changes to your virtual desktops and then updates the notification icon with
 the desktop number. It uses events to wait for registry changes so there is no activity in the background unless you
@@ -28,6 +34,7 @@ There will be more docs coming.... maybe... probably not. There is not much more
 2. Add a floating OSD or maybe fading in/out effect for a more obvious desktop switching visual since Microsoft decided
    to do away with the virtual desktop switching animations in Windows 11. I will hold off on this for a while since
    Microsoft might bring back that functionality once they figure out the performance issues it was causing.
+3. Make it compatible with Windows 10.
 
 ## Building
 
