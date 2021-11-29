@@ -2,21 +2,23 @@
 
 **Windows Defender is reporting that this executable contains Trojan:Win32/Sabsik.FL.A!ml and if not that  
 Trojan:Win32/Wacatac.B!ml or even Win32/Wacapew.C!ml. I have tried submitting it as a false positive, but I don't know
-if that will ever go through. If want to use it you will have to build it yourself since I have removed the releases
+if that will ever go through. If you want to use it you will have to build it yourself since I have removed the releases
 until I can sort this out**
+
+---
 
 This is a simple Windows 11 application that shows an indicator in the system tray displaying the current virtual
 desktop number. It does not work on Windows 10 due to Microsoft changing the registry keys.
 
-It might also require the latest Windows 11 updates since I found it does not work on an older Windows 11 that I have in
-a VM. It works on my current desktop and laptop, so I am happy and don't feel like doing that much investigation. I
-don't have the time to set up development environments on other Windows versions. If it does not work for you, I am
-sorry. Feel free to fork the project and fix it for older versions if you wish. The beauty of Open Source. I might not
-want to incorporate legacy code in this repository so forking is probably the best option if you want to modify it.
+It might also require the latest Windows 11 updates since I found it does not work on an older build of Windows 11 that
+I have in a VM. It works on my current desktop and laptop, so I am happy. I don't have the time to set up development
+environments on other Windows versions. If it does not work for you, I am sorry. Feel free to fork the project and fix
+it for older versions if you wish. The beauty of Open Source. I might not want to incorporate legacy code in this
+repository so forking is probably the best option if you want to modify it.
 
-It maxes out at 10 virtual desktops since anything more than 1 digit is difficult to show nicely in the tray icon.
-Desktop 10 is shown as '0' and Anything past that displays an '*'. If you use more than 10 virtual desktops I think you
-might have a workflow problem to address.
+The application maxes out at 10 virtual desktops since anything more than 1 digit is difficult to show nicely in the
+tray icon. Desktop 10 is shown as '0' and Anything past that displays an '*'. If you use more than 10 virtual desktops I
+think you might have a workflow problem to address.
 
 The application monitors the registry for changes to your virtual desktops and then updates the notification icon with
 the desktop number. It uses events to wait for registry changes so there is no activity in the background unless you
