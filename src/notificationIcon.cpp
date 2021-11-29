@@ -82,9 +82,9 @@ namespace NotificationIcon {
 
     /// @brief Display the notification icon context menu
     /// @param hInst Application instance handle
-    /// @param hwnd Parent window handle
+    /// @param hWnd Parent window handle
     /// @param point The location to show the menu
-    VOID APIENTRY DisplayContextMenu(HINSTANCE hInst, HWND hwnd, POINT point)
+    VOID APIENTRY DisplayContextMenu(HINSTANCE hInst, HWND hWnd, POINT point)
     {
         if ((hNotifyMenu = LoadMenu(hInst, MAKEINTRESOURCE(IDR_NOTIFY_MENU))) ==
                 nullptr)
@@ -94,11 +94,13 @@ namespace NotificationIcon {
         // a handle to the first shortcut menu.
         hMenuTrackPopup = GetSubMenu(hNotifyMenu, 0);
 
+        SetForegroundWindow(hWnd);
+
         // Display the shortcut menu. Track the right mouse
         // button.
         TrackPopupMenu(hMenuTrackPopup,
                 TPM_BOTTOMALIGN | TPM_RIGHTALIGN | TPM_RIGHTBUTTON, point.x,
-                point.y, 0, hwnd, nullptr);
+                point.y, 0, hWnd, nullptr);
 
         DestroyMenu(hNotifyMenu);
     }

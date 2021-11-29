@@ -8,7 +8,7 @@
 void MainWindow::AmendWindowClass(WNDCLASSEXW* wc)
 {
     wc->hIcon = LoadIcon(wc->hInstance, MAKEINTRESOURCE(IDI_SMALL_1));
-    wc->hIconSm = LoadIcon(wc->hInstance, MAKEINTRESOURCE(IDI_SMALL));
+    wc->hIconSm = LoadIcon(wc->hInstance, MAKEINTRESOURCE(IDI_SMALL_1));
     wc->lpszMenuName = MAKEINTRESOURCE(IDC_MAIN_MENU);
 }
 

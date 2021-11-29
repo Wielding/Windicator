@@ -14,5 +14,5 @@ namespace NotificationIcon {
             UINT message, WPARAM wParam,
             LPARAM lParam);
 
-    VOID APIENTRY DisplayContextMenu(HINSTANCE hInst, HWND hwnd, POINT point);
+    VOID APIENTRY DisplayContextMenu(HINSTANCE hInst, HWND hWnd, POINT point);
 }
