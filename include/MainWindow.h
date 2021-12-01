@@ -21,4 +21,5 @@ public:
     DWORD m_dwThreadId{};
     HANDLE m_hDesktopThread{};
     BOOL m_isVisible{FALSE};
+    UINT uTaskbarRestart{};
 };

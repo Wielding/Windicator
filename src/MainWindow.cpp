@@ -33,7 +33,11 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
     switch (uMsg) {
         case WM_CREATE:
-            NotificationIcon::Add(m_hInstance, m_hWnd, 1);
+
+            // Register message to handle re-adding icon after explorer restart.
+            uTaskbarRestart = RegisterWindowMessage(TEXT("TaskbarCreated"));
+
+            NotificationIcon::Add(m_hInstance, m_hWnd, DesktopWatcher::GetCurrentDesktopNumber(nullptr));
 
             watcherData.hWnd = m_hWnd;
 
@@ -100,7 +104,12 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             return 0;
 
-        default:;
+        default:
+            if (uMsg == uTaskbarRestart) {
+                // Put the icon back if explorer has been restarted after a termination or crash
+                NotificationIcon::Add(m_hInstance, m_hWnd, DesktopWatcher::GetCurrentDesktopNumber(nullptr));
+            }
+            ;
     }
 
     return DefWindowProc(hWnd, uMsg, wParam, lParam);

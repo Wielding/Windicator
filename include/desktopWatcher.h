@@ -12,5 +12,7 @@ namespace DesktopWatcher {
 
     VOID ShowErrorMessageBox(HWND hParent, DWORD errorCode);
 
+    UINT GetCurrentDesktopNumber(HKEY hKey);
+
     DWORD WINAPI DesktopWatcherThreadProc(LPVOID lParam);
 }

@@ -18,7 +18,92 @@ namespace DesktopWatcher {
 
         OutputDebugString(errorMessage);
         MessageBox(hParent, errorMessage, L"Windicator Error", MB_ICONERROR);
+    }
 
+    /// @brief Get the current desktop number
+    /// @param hKey handle to key or nullptr to allocate local handle
+    /// @return Desktop Number
+    UINT GetCurrentDesktopNumber(HKEY hKey)
+    {
+        BYTE buffer[4096] = {};
+        PVOID pvData = buffer;
+        LPDWORD pdwType = nullptr;
+        DWORD size = sizeof(buffer);
+        LONG status{};
+        BOOL localHandle = (hKey==nullptr);
+
+        if (localHandle) {
+
+            REGSAM samDesired = KEY_READ | KEY_NOTIFY;
+
+            status = RegOpenKeyEx(
+                    HKEY_CURRENT_USER,
+                    L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\VirtualDesktops",
+                    0,
+                    samDesired,
+                    &hKey
+            );
+        }
+
+        // Get the current desktop ids
+        status = RegGetValue(
+                hKey,
+                nullptr,
+                L"VirtualDesktopIds",
+                RRF_RT_REG_BINARY,
+                pdwType,
+                pvData,
+                &size
+        );
+
+        if (ERROR_SUCCESS!=status) {
+            return 0;
+        }
+
+        std::vector<GUID> desktops;
+
+        // create list of desktop GUIDS using the binary data retrieved from the registry
+        for (size_t i = 0; i<size/16; i++) {
+
+            GUID desktopId;
+            memcpy(&desktopId, &static_cast<BYTE*>(pvData)[i*16], 16);
+
+            desktops.push_back(desktopId);
+        }
+
+        size = sizeof(buffer);
+
+        // get the current virtual desktop id
+        status = RegGetValue(
+                hKey,
+                nullptr,
+                L"CurrentVirtualDesktop",
+                RRF_RT_REG_BINARY,
+                pdwType,
+                pvData,
+                &size
+        );
+
+        GUID currentDesktopId;
+        memcpy(&currentDesktopId, &static_cast<BYTE*>(pvData)[0], 16);
+
+        // check which GUID in desktops matches the current desktop and send
+        // a message to the main window proc containing the desktop number in the
+        // low word of the LPARAM.
+        UINT idx = 1;
+        UINT desktopNumber = 1;
+        for (auto& desktopId: desktops) {
+            if (desktopId==currentDesktopId) {
+                desktopNumber = idx;
+            }
+            idx++;
+        }
+
+        if (localHandle) {
+            RegCloseKey(hKey);
+        }
+
+        return desktopNumber;
     }
 
     /// @brief Thread to watch for registry changes related to Virtual Desktops
@@ -64,7 +149,7 @@ namespace DesktopWatcher {
             // Create an event to wait on for the registry changes
             auto hEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
 
-            if (hEvent == nullptr) {
+            if (hEvent==nullptr) {
                 ShowErrorMessageBox(pData->hWnd, GetLastError());
                 keepGoing = FALSE;
                 continue;
@@ -78,7 +163,7 @@ namespace DesktopWatcher {
                         hEvent,
                         TRUE);
 
-                if (status != ERROR_SUCCESS) {
+                if (status!=ERROR_SUCCESS) {
                     ShowErrorMessageBox(pData->hWnd, GetLastError());
                     keepGoing = FALSE;
                     continue;
@@ -97,86 +182,29 @@ namespace DesktopWatcher {
 #endif
                 auto result = WaitForSingleObject(hEvent, timeout);
 
-                if (result == WAIT_FAILED) {
+                if (result==WAIT_FAILED) {
                     ShowErrorMessageBox(pData->hWnd, GetLastError());
                     keepGoing = FALSE;
                     continue;
                 }
 
-                if (result == WAIT_TIMEOUT) {
+                if (result==WAIT_TIMEOUT) {
                     continue;
                 }
             }
 
             first = FALSE;
 
-            // This buffer will allow for 256 virtual desktops.  That should satisfy just about everyone.
-            // We only have indicators for 10 so there you go.
-            BYTE buffer[4096] = {};
-            PVOID pvData = buffer;
-            LPDWORD pdwType = nullptr;
-            DWORD size = sizeof(buffer);
-
-            // Get the current desktop ids
-            status = RegGetValue(
-                    hKey,
-                    nullptr,
-                    L"VirtualDesktopIds",
-                    RRF_RT_REG_BINARY,
-                    pdwType,
-                    pvData,
-                    &size
-            );
-
-            if (ERROR_SUCCESS != status) {
-                keepGoing = FALSE;
-                continue;
-            }
-
-            std::vector<GUID> desktops;
-
-            // create list of desktop GUIDS using the binary data retrieved from the registry
-            for (size_t i = 0; i < size / 16; i++) {
-
-                GUID desktopId;
-                memcpy(&desktopId, &static_cast<BYTE*>(pvData)[i * 16], 16);
-
-                desktops.push_back(desktopId);
-            }
-
-            size = sizeof(buffer);
-
-            // get the current virtual desktop id
-            status = RegGetValue(
-                    hKey,
-                    nullptr,
-                    L"CurrentVirtualDesktop",
-                    RRF_RT_REG_BINARY,
-                    pdwType,
-                    pvData,
-                    &size
-            );
-
-            GUID currentDesktopId;
-            memcpy(&currentDesktopId, &static_cast<BYTE*>(pvData)[0], 16);
-
-            // check which GUID in desktops matches the current desktop and send
-            // a message to the main window proc containing the desktop number in the
-            // low word of the LPARAM.
-            auto idx = 1;
-            for (auto& desktopId: desktops) {
-                if (desktopId == currentDesktopId) {
-                    PostMessage(pData->hWnd, APP_WM_DESKTOP_CHANGE, 0, MAKELPARAM(idx, 0));
-                    continue;
-                }
-                idx++;
-            }
+            auto desktopNumber = GetCurrentDesktopNumber(hKey);
+            PostMessage(pData->hWnd, APP_WM_DESKTOP_CHANGE, 0, MAKELPARAM(desktopNumber, 0));
         }
 
-        // We most likely will not hit this unless _TIDY_TIMEOUT is defined at compile time or
-        // an error condition occurred.
-        RegCloseKey(hKey);
 
-        return TRUE;
-    }
+    // We most likely will not hit this unless _TIDY_TIMEOUT is defined at compile time or
+    // an error condition occurred.
+    RegCloseKey(hKey);
+
+    return TRUE;
+}
+
 }
