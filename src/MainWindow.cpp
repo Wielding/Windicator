@@ -35,11 +35,11 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
         case WM_CREATE:
 
             // Register message to handle re-adding icon after explorer restart.
-            uTaskbarRestart = RegisterWindowMessage(TEXT("TaskbarCreated"));
+            m_uMsgTaskbarCreated = RegisterWindowMessage(TEXT("TaskbarCreated"));
 
             NotificationIcon::Add(m_hInstance, m_hWnd, DesktopWatcher::GetCurrentDesktopNumber(nullptr));
 
-            watcherData.hWnd = m_hWnd;
+            m_stWatcherData.hWnd = m_hWnd;
 
             // Start a thread that watches for Virtual Desktop registry changes
             // and posts messages (APP_WM_DESKTOP_CHANGE) to this window when they change.
@@ -47,7 +47,7 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
                     nullptr,
                     0,
                     DesktopWatcher::DesktopWatcherThreadProc,
-                    &watcherData,
+                    &m_stWatcherData,
                     0,
                     &m_dwThreadId
             );
@@ -61,8 +61,8 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 
                 case IDM_NOTIFY_EXIT:
                 case IDM_EXIT: {
-                    std::lock_guard lock(watcherData.lock);
-                    watcherData.keepGoing = FALSE;
+                    std::lock_guard lock(m_stWatcherData.lock);
+                    m_stWatcherData.keepGoing = FALSE;
                 }
 #ifdef _TIDY_TIMEOUT
                     WaitForSingleObject(m_hDesktopThread, 2000);
@@ -105,11 +105,10 @@ LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
             return 0;
 
         default:
-            if (uMsg == uTaskbarRestart) {
+            if (uMsg == m_uMsgTaskbarCreated) {
                 // Put the icon back if explorer has been restarted after a termination or crash
                 NotificationIcon::Add(m_hInstance, m_hWnd, DesktopWatcher::GetCurrentDesktopNumber(nullptr));
             }
-            ;
     }
 
     return DefWindowProc(hWnd, uMsg, wParam, lParam);

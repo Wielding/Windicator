@@ -52,21 +52,13 @@ namespace NotificationIcon {
     /// @return result
     HRESULT Modify(HINSTANCE hInst, HWND hWndMain, UINT nDesktop)
     {
-        nid.cbSize = sizeof(nid);
-        nid.hWnd = hWndMain;
-        nid.uFlags = NIF_ICON | NIF_TIP | NIF_MESSAGE;
-
-        // Set the notification tip text
-        WCHAR szTitle[ARRAYSIZE(nid.szTip)];
-        LoadStringW(hInst, IDS_APP_TITLE, szTitle, ARRAYSIZE(szTitle));
-        StringCchCopy(nid.szTip, ARRAYSIZE(nid.szTip), szTitle);
+        nid.uFlags = NIF_ICON;
 
         if (nDesktop > 10) {
             nDesktop = 11;
         }
 
         nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_SMALL_START + nDesktop));
-        nid.uCallbackMessage = APP_WM_ICON_NOTIFY;
 
         auto result = Shell_NotifyIcon(NIM_MODIFY, &nid) ? S_OK : E_FAIL;
 
@@ -107,9 +99,7 @@ namespace NotificationIcon {
 
     /// @brief The notification icon window proc
     /// @return result
-    INT_PTR CALLBACK WndProc(HINSTANCE hInst, HWND hWnd,
-            UINT message, WPARAM wParam,
-            LPARAM lParam)
+    INT_PTR CALLBACK WndProc(HINSTANCE hInst, HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         switch (lParam) {
             case WM_LBUTTONDBLCLK:

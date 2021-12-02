@@ -48,10 +48,8 @@ namespace AboutDialog {
                 }
                 break;
 
-            case WM_NOTIFY:
-            {
-                switch (reinterpret_cast<LPNMHDR>(lParam)->code)
-                {
+            case WM_NOTIFY: {
+                switch (reinterpret_cast<LPNMHDR>(lParam)->code) {
                     case NM_CLICK:
                     case NM_RETURN:
                         auto* pNmLink = reinterpret_cast<PNMLINK>(lParam);

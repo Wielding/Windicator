@@ -30,7 +30,7 @@ namespace DesktopWatcher {
         LPDWORD pdwType = nullptr;
         DWORD size = sizeof(buffer);
         LONG status{};
-        BOOL localHandle = (hKey==nullptr);
+        BOOL localHandle = (hKey == nullptr);
 
         if (localHandle) {
 
@@ -56,17 +56,17 @@ namespace DesktopWatcher {
                 &size
         );
 
-        if (ERROR_SUCCESS!=status) {
+        if (ERROR_SUCCESS != status) {
             return 0;
         }
 
         std::vector<GUID> desktops;
 
         // create list of desktop GUIDS using the binary data retrieved from the registry
-        for (size_t i = 0; i<size/16; i++) {
+        for (size_t i = 0; i < size / 16; i++) {
 
             GUID desktopId;
-            memcpy(&desktopId, &static_cast<BYTE*>(pvData)[i*16], 16);
+            memcpy(&desktopId, &static_cast<BYTE*>(pvData)[i * 16], 16);
 
             desktops.push_back(desktopId);
         }
@@ -93,7 +93,7 @@ namespace DesktopWatcher {
         UINT idx = 1;
         UINT desktopNumber = 1;
         for (auto& desktopId: desktops) {
-            if (desktopId==currentDesktopId) {
+            if (desktopId == currentDesktopId) {
                 desktopNumber = idx;
             }
             idx++;
@@ -149,7 +149,7 @@ namespace DesktopWatcher {
             // Create an event to wait on for the registry changes
             auto hEvent = CreateEvent(nullptr, TRUE, FALSE, nullptr);
 
-            if (hEvent==nullptr) {
+            if (hEvent == nullptr) {
                 ShowErrorMessageBox(pData->hWnd, GetLastError());
                 keepGoing = FALSE;
                 continue;
@@ -163,7 +163,7 @@ namespace DesktopWatcher {
                         hEvent,
                         TRUE);
 
-                if (status!=ERROR_SUCCESS) {
+                if (status != ERROR_SUCCESS) {
                     ShowErrorMessageBox(pData->hWnd, GetLastError());
                     keepGoing = FALSE;
                     continue;
@@ -182,13 +182,13 @@ namespace DesktopWatcher {
 #endif
                 auto result = WaitForSingleObject(hEvent, timeout);
 
-                if (result==WAIT_FAILED) {
+                if (result == WAIT_FAILED) {
                     ShowErrorMessageBox(pData->hWnd, GetLastError());
                     keepGoing = FALSE;
                     continue;
                 }
 
-                if (result==WAIT_TIMEOUT) {
+                if (result == WAIT_TIMEOUT) {
                     continue;
                 }
             }
@@ -200,11 +200,11 @@ namespace DesktopWatcher {
         }
 
 
-    // We most likely will not hit this unless _TIDY_TIMEOUT is defined at compile time or
-    // an error condition occurred.
-    RegCloseKey(hKey);
+        // We most likely will not hit this unless _TIDY_TIMEOUT is defined at compile time or
+        // an error condition occurred.
+        RegCloseKey(hKey);
 
-    return TRUE;
-}
+        return TRUE;
+    }
 
 }

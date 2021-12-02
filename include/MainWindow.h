@@ -10,7 +10,7 @@ protected:
 
     [[nodiscard]] PCWSTR ClassName() const override;
 
-    DesktopWatcher::DesktopWatcherData watcherData{};
+    DesktopWatcher::DesktopWatcherData m_stWatcherData{};
 
 public:
     virtual ~MainWindow() = default;
@@ -21,5 +21,5 @@ public:
     DWORD m_dwThreadId{};
     HANDLE m_hDesktopThread{};
     BOOL m_isVisible{FALSE};
-    UINT uTaskbarRestart{};
+    UINT m_uMsgTaskbarCreated{};
 };

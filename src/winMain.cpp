@@ -6,8 +6,7 @@
 
 /// @brief Application entry point
 /// @return result
-INT WINAPI wWinMain(_In_ HINSTANCE hInstance, _In_opt_ HINSTANCE hPrevInstance,
-        _In_ LPWSTR lpCmdLine, _In_ int nShowCmd)
+INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nShowCmd)
 {
     std::wstring mutexName = L"Windicator_Instance";
 

@@ -3,15 +3,16 @@
 
 constexpr int MAX_LOAD_STRING = 100;
 
+/// @brief This is the template class for the main window to allow encapsulating the window logic in a class for
+// better organization
+/// @tparam DerivedType
 template<class DerivedType>
 class BaseWindow {
 public:
     HMODULE m_hInstance{};
 
     BaseWindow()
-            :m_hWnd(nullptr)
-    {
-    }
+            :m_hWnd(nullptr) { }
 
     static LRESULT CALLBACK WindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
     {
