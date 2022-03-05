@@ -39,7 +39,6 @@ namespace NotificationIcon {
                     MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), err, 255, nullptr);
 
             OutputDebugString(err);
-            MessageBox(hWndMain, err, L"Windicator Error", MB_ICONERROR);
         }
 
         return result;
