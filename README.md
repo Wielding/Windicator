@@ -1,13 +1,5 @@
 # Windicator
 
-After removing a bunch of unnecessary icon resolutions from the resources the application no longer triggers a
-virus/trojan warning. As a bonus the executable went from 753K down to 299K. I have published the latest release.
-
-~~**Windows Defender is reporting that this executable contains Trojan:Win32/Sabsik.FL.A!ml and if not that  
-Trojan:Win32/Wacatac.B!ml or even Win32/Wacapew.C!ml. I have tried submitting it as a false positive, but I don't know
-if that will ever go through. If you want to use it you will have to build it yourself since I have removed the releases
-until I can sort this out**~~
-
 ---
 
 This is a simple Windows 11 application that shows an indicator in the system tray displaying the current virtual
