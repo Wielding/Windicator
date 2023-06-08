@@ -1,8 +1,10 @@
 #include "../include/framework.h"
 #include "../include/MainWindow.h"
 #include "../resources/resource.h"
+#include "../include/Config.h"
 
 #include <string>
+#include <memory>
 
 /// @brief Application entry point
 /// @return result
@@ -21,13 +23,15 @@ INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
     LoadString(hInstance, IDS_APP_TITLE, szWindowName, MAX_LOAD_STRING);
 
-    MainWindow mainWindow;
+    std::shared_ptr<Config> config = std::make_shared<Config>();
 
-    if (!mainWindow.Create(szWindowName, WS_OVERLAPPED)) {
+    std::unique_ptr<MainWindow> mainWindow = std::make_unique<MainWindow>(config);
+
+    if (!mainWindow->Create(szWindowName, WS_OVERLAPPED)) {
         return 0;
     }
 
-    mainWindow.Show(SW_HIDE);
+    mainWindow->Show(SW_HIDE);
 
     auto* const hAccelerators =
             LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MAIN_MENU));

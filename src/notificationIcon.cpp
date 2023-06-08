@@ -26,7 +26,7 @@ namespace NotificationIcon {
         LoadStringW(hInst, IDS_APP_TITLE, szTitle, ARRAYSIZE(szTitle));
         StringCchCopy(nid.szTip, ARRAYSIZE(nid.szTip), szTitle);
 
-        nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_SMALL_START + nDesktop));
+        nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_BLUE_SMALL_START + nDesktop));
         nid.uCallbackMessage = APP_WM_ICON_NOTIFY;
 
         auto result = Shell_NotifyIcon(NIM_ADD, &nid) ? S_OK : E_FAIL;
@@ -57,7 +57,7 @@ namespace NotificationIcon {
             nDesktop = 11;
         }
 
-        nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_SMALL_START + nDesktop));
+        nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_BLUE_SMALL_START + nDesktop));
 
         auto result = Shell_NotifyIcon(NIM_MODIFY, &nid) ? S_OK : E_FAIL;
 

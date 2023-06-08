@@ -27,6 +27,11 @@ PCWSTR MainWindow::ClassName() const
 /// @param wParam WPARAM
 /// @param lParam LPARAM
 /// @return result
+MainWindow::MainWindow(std::shared_ptr<Config> config)
+{
+    m_config = config;
+}
+
 LRESULT MainWindow::HandleMessage(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     auto* const hWnd = m_hWnd;
