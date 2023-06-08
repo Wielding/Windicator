@@ -24,18 +24,18 @@ INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
     std::wstringstream wss(lpCmdLine);
     std::wstring arg;
-    std::vector<std::wstring> list;
+    std::vector<std::wstring> args;
     while (wss >> arg) {
-        list.push_back(arg);
+        args.push_back(arg);
     }
 
     // default to small white icons
     auto iconOffset = IDI_SMALL_START;
 
-    auto found = std::find(list.begin(), list.end(), L"--blue");
+    auto found = std::find(args.begin(), args.end(), L"--blue");
 
-    // if --blue is found, use small blue icons
-    if (found != list.end()) {
+    // if --blue is provided as a command line argument, use blue icons
+    if (found != args.end()) {
         iconOffset = IDI_BLUE_SMALL_START;
     }
 
@@ -54,16 +54,16 @@ INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 
     mainWindow->Show(SW_HIDE);
 
-    auto* const hAccelerators =
-        LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MAIN_MENU));
+    // auto* const hAccelerators =
+    //     LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MAIN_MENU));
 
     MSG msg = {};
 
     while (GetMessage(&msg, nullptr, 0, 0)) {
-        if (!TranslateAccelerator(msg.hwnd, hAccelerators, &msg)) {
+        // if (!TranslateAccelerator(msg.hwnd, hAccelerators, &msg)) {
             TranslateMessage(&msg);
             DispatchMessage(&msg);
-        }
+        // }
     }
 
     ReleaseMutex(mutex);

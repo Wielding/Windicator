@@ -126,8 +126,8 @@ CAPTION "About Windicator"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     ICON            IDI_SMALL_1,IDC_STATIC,14,14,20,20
-    LTEXT           "Windicator, Version 1.0",IDC_VERSION_TEXT,42,14,114,8,SS_NOPREFIX
-    LTEXT           "Copyright (c) 2021",IDC_STATIC,42,26,114,8
+    LTEXT           "Windicator, Version 1.2",IDC_VERSION_TEXT,42,14,114,8,SS_NOPREFIX
+    LTEXT           "Copyright (c) 2023",IDC_STATIC,42,26,114,8
     DEFPUSHBUTTON   "OK",IDOK,114,58,50,14,WS_GROUP
     CONTROL         "<a href=""https://wielding.dev"">Wielding Logic</a>",IDC_ABOUT_WEBLINK,
                     "SysLink",WS_TABSTOP,42,39,60,14
@@ -190,8 +190,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,1,5,0
- PRODUCTVERSION 1,1,5,0
+ FILEVERSION 1,2,0,0
+ PRODUCTVERSION 1,2,0,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -208,12 +208,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Wielding Logic"
             VALUE "FileDescription", "Windicator virtual desktop indicator"
-            VALUE "FileVersion", "1.1.5.0"
+            VALUE "FileVersion", "1.2.0.0"
             VALUE "InternalName", "Windicator.exe"
-            VALUE "LegalCopyright", "Copyright (C) 2021"
+            VALUE "LegalCopyright", "Copyright (C) 2023"
             VALUE "OriginalFilename", "Windicator.exe"
             VALUE "ProductName", "Windicator"
-            VALUE "ProductVersion", "1.1.5.0"
+            VALUE "ProductVersion", "1.2.0.0"
         END
     END
     BLOCK "VarFileInfo"
