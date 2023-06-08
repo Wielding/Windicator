@@ -53,13 +53,11 @@ IDI_SMALL_0             ICON                    "small_0.ico"
 
 IDI_SMALL_X             ICON                    "small_x.ico"
 
-
 IDI_BLUE_SMALL_1             ICON                    "blue_small_1.ico"
 
 IDI_BLUE_SMALL_2             ICON                    "blue_small_2.ico"
 
 IDI_BLUE_SMALL_3             ICON                    "blue_small_3.ico"
-IDI_BLUE_SMALL_START
 
 IDI_BLUE_SMALL_5             ICON                    "blue_small_5.ico"
 

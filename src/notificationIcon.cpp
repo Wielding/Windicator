@@ -4,6 +4,7 @@
 
 #include <shellapi.h>
 #include <strsafe.h>
+#include <memory>
 
 namespace NotificationIcon {
 
@@ -16,7 +17,7 @@ namespace NotificationIcon {
     /// @param hWndMain The parent window handle
     /// @param nDesktop The current desktop number
     /// @return result
-    HRESULT Add(HINSTANCE hInst, HWND hWndMain, UINT nDesktop)
+    HRESULT Add(HINSTANCE hInst, HWND hWndMain, UINT nDesktop, UINT iconOffset)
     {
         nid.cbSize = sizeof(nid);
         nid.hWnd = hWndMain;
@@ -26,7 +27,7 @@ namespace NotificationIcon {
         LoadStringW(hInst, IDS_APP_TITLE, szTitle, ARRAYSIZE(szTitle));
         StringCchCopy(nid.szTip, ARRAYSIZE(nid.szTip), szTitle);
 
-        nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_BLUE_SMALL_START + nDesktop));
+        nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(iconOffset + nDesktop));
         nid.uCallbackMessage = APP_WM_ICON_NOTIFY;
 
         auto result = Shell_NotifyIcon(NIM_ADD, &nid) ? S_OK : E_FAIL;
@@ -49,7 +50,7 @@ namespace NotificationIcon {
     /// @param hWndMain The parent window handle
     /// @param nDesktop The current desktop number
     /// @return result
-    HRESULT Modify(HINSTANCE hInst, HWND hWndMain, UINT nDesktop)
+    HRESULT Modify(HINSTANCE hInst, HWND hWndMain, UINT nDesktop, UINT iconOffset)
     {
         nid.uFlags = NIF_ICON;
 
@@ -57,7 +58,7 @@ namespace NotificationIcon {
             nDesktop = 11;
         }
 
-        nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(IDI_BLUE_SMALL_START + nDesktop));
+        nid.hIcon = LoadIcon(hInst, MAKEINTRESOURCE(iconOffset + nDesktop));
 
         auto result = Shell_NotifyIcon(NIM_MODIFY, &nid) ? S_OK : E_FAIL;
 

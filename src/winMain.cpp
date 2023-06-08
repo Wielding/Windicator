@@ -5,6 +5,9 @@
 
 #include <string>
 #include <memory>
+#include <map>
+#include <sstream>
+#include <vector>
 
 /// @brief Application entry point
 /// @return result
@@ -19,11 +22,29 @@ INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         return 8;
     }
 
+    std::wstringstream wss(lpCmdLine);
+    std::wstring arg;
+    std::vector<std::wstring> list;
+    while (wss >> arg) {
+        list.push_back(arg);
+    }
+
+    // default to small white icons
+    auto iconOffset = IDI_SMALL_START;
+
+    auto found = std::find(list.begin(), list.end(), L"--blue");
+
+    // if --blue is found, use small blue icons
+    if (found != list.end()) {
+        iconOffset = IDI_BLUE_SMALL_START;
+    }
+
     wchar_t szWindowName[MAX_LOAD_STRING];
 
     LoadString(hInstance, IDS_APP_TITLE, szWindowName, MAX_LOAD_STRING);
 
     std::shared_ptr<Config> config = std::make_shared<Config>();
+    config->iconOffset = iconOffset;
 
     std::unique_ptr<MainWindow> mainWindow = std::make_unique<MainWindow>(config);
 
@@ -34,7 +55,7 @@ INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     mainWindow->Show(SW_HIDE);
 
     auto* const hAccelerators =
-            LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MAIN_MENU));
+        LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_MAIN_MENU));
 
     MSG msg = {};
 

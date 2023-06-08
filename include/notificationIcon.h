@@ -4,9 +4,9 @@
 
 namespace NotificationIcon {
 
-    HRESULT Add(HINSTANCE hInst, HWND hWndMain, UINT nDesktop);
+    HRESULT Add(HINSTANCE hInst, HWND hWndMain, UINT nDesktop, UINT iconOffset);
 
-    HRESULT Modify(HINSTANCE hInst, HWND hWndMain, UINT nDesktop);
+    HRESULT Modify(HINSTANCE hInst, HWND hWndMain, UINT nDesktop, UINT iconOffset);
 
     HRESULT Remove();
 
