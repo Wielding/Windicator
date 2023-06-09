@@ -32,12 +32,16 @@ INT WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     // default to small white icons
     auto iconOffset = IDI_SMALL_START;
 
-    auto found = std::find(args.begin(), args.end(), L"--blue");
+    std::vector<UINT> iconChoices = {
+        IDI_SMALL_START,
+        IDI_BLUE_SMALL_START,
+        IDI_DARK_SMALL_START
+    };
 
-    // if --blue is provided as a command line argument, use blue icons
-    if (found != args.end()) {
-        iconOffset = IDI_BLUE_SMALL_START;
-    }
+    auto iconChoice = std::find(args.begin(), args.end(), L"--blue") != args.end() ? 1 : 0;
+    iconChoice = std::find(args.begin(), args.end(), L"--dark") != args.end() ? 2 : iconChoice;
+
+    iconOffset = iconChoices[iconChoice];
 
     wchar_t szWindowName[MAX_LOAD_STRING];
 

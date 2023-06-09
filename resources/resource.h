@@ -35,6 +35,18 @@
 #define IDI_BLUE_SMALL_9                 152
 #define IDI_BLUE_SMALL_0                 153
 #define IDI_BLUE_SMALL_X                 154
+#define IDI_DARK_SMALL_START             155
+#define IDI_DARK_SMALL_1                 156
+#define IDI_DARK_SMALL_2                 157
+#define IDI_DARK_SMALL_3                 158
+#define IDI_DARK_SMALL_4                 159
+#define IDI_DARK_SMALL_5                 160
+#define IDI_DARK_SMALL_6                 161
+#define IDI_DARK_SMALL_7                 162
+#define IDI_DARK_SMALL_8                 163
+#define IDI_DARK_SMALL_9                 164
+#define IDI_DARK_SMALL_0                 165
+#define IDI_DARK_SMALL_X                 166
 #define IDC_VERSION_TEXT                1000
 #define IDC_ABOUT_WEBLINK               1001
 #define IDM_NOTIFY_TOGGLE_VISIBILITY     32773
@@ -46,7 +58,7 @@
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        155
+#define _APS_NEXT_RESOURCE_VALUE        167
 #define _APS_NEXT_COMMAND_VALUE         32775
 #define _APS_NEXT_CONTROL_VALUE         1002
 #define _APS_NEXT_SYMED_VALUE           110
