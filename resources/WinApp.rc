@@ -59,6 +59,8 @@ IDI_BLUE_SMALL_2             ICON                    "blue_small_2.ico"
 
 IDI_BLUE_SMALL_3             ICON                    "blue_small_3.ico"
 
+IDI_BLUE_SMALL_4             ICON                    "blue_small_4.ico"
+
 IDI_BLUE_SMALL_5             ICON                    "blue_small_5.ico"
 
 IDI_BLUE_SMALL_6             ICON                    "blue_small_6.ico"
@@ -71,13 +73,15 @@ IDI_BLUE_SMALL_9             ICON                    "blue_small_9.ico"
 
 IDI_BLUE_SMALL_0             ICON                    "blue_small_0.ico"
 
-IDI_DARK_SMALL_X             ICON                    "small_dark_x.ico"
+IDI_BLUE_SMALL_X             ICON                    "blue_small_x.ico"
 
 IDI_DARK_SMALL_1             ICON                    "small_dark_1.ico"
 
 IDI_DARK_SMALL_2             ICON                    "small_dark_2.ico"
 
 IDI_DARK_SMALL_3             ICON                    "small_dark_3.ico"
+
+IDI_DARK_SMALL_4             ICON                    "small_dark_4.ico"
 
 IDI_DARK_SMALL_5             ICON                    "small_dark_5.ico"
 
@@ -90,6 +94,8 @@ IDI_DARK_SMALL_8             ICON                    "small_dark_8.ico"
 IDI_DARK_SMALL_9             ICON                    "small_dark_9.ico"
 
 IDI_DARK_SMALL_0             ICON                    "small_dark_0.ico"
+
+IDI_DARK_SMALL_X             ICON                    "small_dark_x.ico"
 
 
 
@@ -145,8 +151,8 @@ CAPTION "About Windicator"
 FONT 8, "MS Shell Dlg", 0, 0, 0x1
 BEGIN
     ICON            IDI_SMALL_1,IDC_STATIC,14,14,20,20
-    LTEXT           "Windicator, Version 1.2",IDC_VERSION_TEXT,42,14,114,8,SS_NOPREFIX
-    LTEXT           "Copyright (c) 2023",IDC_STATIC,42,26,114,8
+    LTEXT           "Windicator, Version 1.2.1",IDC_VERSION_TEXT,42,14,114,8,SS_NOPREFIX
+    LTEXT           "Copyright (c) 2025",IDC_STATIC,42,26,114,8
     DEFPUSHBUTTON   "OK",IDOK,114,58,50,14,WS_GROUP
     CONTROL         "<a href=""https://wielding.dev"">Wielding Logic</a>",IDC_ABOUT_WEBLINK,
                     "SysLink",WS_TABSTOP,42,39,60,14
@@ -209,8 +215,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 1,2,0,0
- PRODUCTVERSION 1,2,0,0
+ FILEVERSION 1,2,1,0
+ PRODUCTVERSION 1,2,1,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -227,12 +233,12 @@ BEGIN
         BEGIN
             VALUE "CompanyName", "Wielding Logic"
             VALUE "FileDescription", "Windicator virtual desktop indicator"
-            VALUE "FileVersion", "1.2.0.0"
+            VALUE "FileVersion", "1.2.1.0"
             VALUE "InternalName", "Windicator.exe"
-            VALUE "LegalCopyright", "Copyright (C) 2023"
+            VALUE "LegalCopyright", "Copyright (C) 2025"
             VALUE "OriginalFilename", "Windicator.exe"
             VALUE "ProductName", "Windicator"
-            VALUE "ProductVersion", "1.2.0.0"
+            VALUE "ProductVersion", "1.2.1.0"
         END
     END
     BLOCK "VarFileInfo"
